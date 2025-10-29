@@ -29,7 +29,7 @@ jobs:
       AUTH_VERSION_HEADER: ${{ secrets.AUTH_VERSION_HEADER }}
       PRICING_API_VERSION: ${{ secrets.PRICING_API_VERSION }}
       SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-      SUPABASE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
       
     steps:
       - name: Checkout repo
