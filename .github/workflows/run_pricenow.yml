@@ -18,6 +18,7 @@ concurrency:
 jobs:
   etl:
     runs-on: ubuntu-latest
+    environment: prod
     timeout-minutes: 30
     env:
       # Map GitHub repo secrets into environment vars your script reads
