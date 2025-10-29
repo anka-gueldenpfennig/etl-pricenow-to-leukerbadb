@@ -1,0 +1,49 @@
+name: Pricenow ETL (twice daily)
+
+on:
+  # 07:00 & 15:00 UTC+1 -> schedule 06:00 & 14:00 UTC.
+  schedule:
+    - cron: "0 6 * * *"
+    - cron: "0 14 * * *"
+  # Allow manual runs from the UI
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pricenow-etl
+  cancel-in-progress: false
+
+jobs:
+  etl:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      # Map GitHub repo secrets into environment vars your script reads
+      PRICENOW_CLIENT_ID: ${{ secrets.PRICENOW_CLIENT_ID }}
+      PRICENOW_CLIENT_SECRET: ${{ secrets.PRICENOW_CLIENT_SECRET }}
+      AUDIENCE: ${{ secrets.AUDIENCE }}
+      GRANT_TYPE: ${{ secrets.GRANT_TYPE }}
+      AUTH_VERSION_HEADER: ${{ secrets.AUTH_VERSION_HEADER }}
+      PRICING_API_VERSION: ${{ secrets.PRICING_API_VERSION }}
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      
+    steps:
+      - name: Checkout repo
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run ETL
+        run: |
+          python scripts/pricenow_etl.py
