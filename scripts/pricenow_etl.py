@@ -328,8 +328,8 @@ def make_pricenow_products_df(updated_at: datetime) -> pd.DataFrame:
 # get live price data from pricing API
 def make_pricenow_prices_df(product_ids: list, updated_at: datetime) -> pd.DataFrame:
     # define season dates
-    season_start = date(2025, 12, 13)
-    season_end   = date(2026, 4, 12)
+    season_start = date(2026, 12, 05)
+    season_end   = date(2027, 4, 04)
 
     # fetch all change points across the season for all products (paginated)
     change_rows = get_prices_all(product_ids, season_start.isoformat(), season_end.isoformat(), page_size=1000)
